@@ -57,3 +57,13 @@ func BenchmarkDecodeDefault(b *testing.B) {
 		}
 	}
 }
+
+
+func BenchmarkEncode(b *testing.B) {
+	for i := 0; i< b.N; i++ {
+		if _, err := Marshal("key1", "v1", "k2", "v2", "k3", "v3"); err != nil {
+			panic(err)
+		}
+	}
+}
+
