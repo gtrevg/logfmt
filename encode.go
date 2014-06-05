@@ -19,20 +19,18 @@
 package logfmt
 
 import (
-        "bytes"
-        "fmt"
+	"bytes"
+	"fmt"
 	"strconv"
 	"strings"
 	"time"
 )
 
-
 const (
-        timeLayout = "2006-01-02T15:04:05-0700"
-        floatFormat = 'f'
-        errorKey = "logfmtError"
+	timeLayout  = "2006-01-02T15:04:05-0700"
+	floatFormat = 'f'
+	errorKey    = "logfmtError"
 )
-
 
 func Marshal(items ...interface{}) ([]byte, error) {
 	pieces := make([]string, 0)
@@ -50,10 +48,8 @@ func Marshal(items ...interface{}) ([]byte, error) {
 		pieces = append(pieces, s)
 	}
 
-	return []byte(strings.Join(pieces, " ")), nil  // No newline line in the original
+	return []byte(strings.Join(pieces, " ")), nil // No newline line in the original
 }
-
-
 
 func formatShared(value interface{}) interface{} {
 	switch v := value.(type) {
@@ -70,7 +66,6 @@ func formatShared(value interface{}) interface{} {
 		return v
 	}
 }
-
 
 // formatValue formats a value for serialization
 func encodeValue(value interface{}) string {
@@ -137,18 +132,9 @@ func escapeString(s string) string {
 		}
 
 		switch r {
-		case '\\', '"':
+		case '"':
 			e.WriteByte('\\')
 			e.WriteByte(byte(r))
-		case '\n':
-			e.WriteByte('\\')
-			e.WriteByte('n')
-		case '\r':
-			e.WriteByte('\\')
-			e.WriteByte('r')
-		case '\t':
-			e.WriteByte('\\')
-			e.WriteByte('t')
 		default:
 			e.WriteRune(r)
 		}
@@ -160,4 +146,3 @@ func escapeString(s string) string {
 	}
 	return string(e.Bytes()[start:stop])
 }
-

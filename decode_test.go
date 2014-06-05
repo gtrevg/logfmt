@@ -42,6 +42,48 @@ func TestDecodeCustom(t *testing.T) {
 	}
 }
 
+
+func TestDecodeNewlines(t *testing.T) {
+        data := []byte(`a=foo b=10ms c="a newline
+character here"`)
+
+        g := new(coll)
+        if err := Unmarshal(data, g); err != nil {
+                t.Fatal(err)
+        }
+
+        w := []pair{
+                {"a", "foo"},
+                {"b", "10ms"},
+                {"c", "a newline\ncharacter here"},
+        }
+
+        if !reflect.DeepEqual(w, g.a) {
+                t.Errorf("\nwant %v\n got %v", w, g)
+        }
+}
+
+
+func TestDecodeSlashes(t *testing.T) {
+        data := []byte(`a=foo b=10ms c="a slash (\\) goes here"`)
+
+        g := new(coll)
+        if err := Unmarshal(data, g); err != nil {
+                t.Fatal(err)
+        }
+
+        w := []pair{
+                {"a", "foo"},
+                {"b", "10ms"},
+                {"c", `a slash (\) goes here`},
+        }
+
+        if !reflect.DeepEqual(w, g.a) {
+                t.Errorf("\nwant %v\n got %v", w, g)
+        }
+}
+
+
 func TestDecodeDefault(t *testing.T) {
 	var g struct {
 		Float  float64
